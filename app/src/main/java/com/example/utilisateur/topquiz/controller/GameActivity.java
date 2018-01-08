@@ -16,19 +16,16 @@ import java.util.Arrays;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView mGreetingText;
-    private Button mPlayButton1;
-    private Button mPlayButton2;
-    private Button mPlayButton3;
-    private Button mPlayButton4;
-    private QuestionBank mQuestionBank;
-    private Question mCurrentQuestion;
-    private int mScore;
+    private TextView mQuestionTextView;
     private Button mAnswerButton1;
     private Button mAnswerButton2;
     private Button mAnswerButton3;
     private Button mAnswerButton4;
-    private TextView mQuestionTextView;
+
+    private int mNumberOfQuestions;
+
+    private QuestionBank mQuestionBank;
+    private Question mCurrentQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,20 +33,38 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_game);
 
 
-        mQuestionBank = this.generateQuestions();
+
+        mNumberOfQuestions = 4;
+
+
+
 
         //recuperation des variables xml
 
-        mGreetingText = findViewById(R.id.activity_game_question_text);
-        mPlayButton1 = findViewById(R.id.activity_game_answer1_btn);
-        mPlayButton2 = findViewById(R.id.activity_game_answer2_btn);
-        mPlayButton3 = findViewById(R.id.activity_game_answer3_btn);
-        mPlayButton4 = findViewById(R.id.activity_game_answer4_btn);
+        // Wire widgets
+        mQuestionTextView = (TextView) findViewById(R.id.activity_game_question_text);
+        mAnswerButton1 = (Button) findViewById(R.id.activity_game_answer1_btn);
+        mAnswerButton2 = (Button) findViewById(R.id.activity_game_answer2_btn);
+        mAnswerButton3 = (Button) findViewById(R.id.activity_game_answer3_btn);
+        mAnswerButton4 = (Button) findViewById(R.id.activity_game_answer4_btn);
         mQuestionBank = this.generateQuestions();
+
+        // Use the tag property to 'name' the buttons
+        mAnswerButton1.setTag(0);
+        mAnswerButton2.setTag(1);
+        mAnswerButton3.setTag(2);
+        mAnswerButton4.setTag(3);
+
+        // Use the same listener for the four buttons.
+        // The tag value will be used to distinguish the button triggered
+        mAnswerButton1.setOnClickListener(this);
+        mAnswerButton2.setOnClickListener(this);
+        mAnswerButton3.setOnClickListener(this);
+        mAnswerButton4.setOnClickListener(this);
+
 
         mCurrentQuestion = mQuestionBank.getQuestion();
         this.displayQuestion(mCurrentQuestion);
-
     }
 
     @Override
@@ -59,12 +74,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (responseIndex == mCurrentQuestion.getAnswerIndex()) {
             // Good answer
             Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show();
-            mScore++;
+
         } else {
             // Wrong answer
             Toast.makeText(this, "Wrong answer!", Toast.LENGTH_SHORT).show();
-        }}
+        }
+    // If this is the last question, ends the game.
+    // Else, display the next question.
+        if (--mNumberOfQuestions == 0) {
+        // End the game
 
+        } else {
+        mCurrentQuestion = mQuestionBank.getQuestion();
+        displayQuestion(mCurrentQuestion);
+        }
+}
 
     private void displayQuestion(final Question question) {
         mQuestionTextView.setText(question.getQuestion());

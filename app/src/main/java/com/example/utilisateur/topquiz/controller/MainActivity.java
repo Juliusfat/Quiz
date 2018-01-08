@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mUser = new user();
+
         //recuperation des variables xml
 
         mGreetingText = (TextView) findViewById(R.id.activity_main_greeting_txt);
@@ -57,15 +59,15 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
-
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String firstname = mNameInput.getText().toString();
+                mUser.setFirstName(firstname);
                 // The user just clicked
                 Intent gameActivityIntent = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(gameActivityIntent);
-                mUser.setFirstName(mNameInput.getText().toString());
+
             }
         });
     }
