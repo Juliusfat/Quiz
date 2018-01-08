@@ -2,9 +2,11 @@ package com.example.utilisateur.topquiz.controller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.utilisateur.topquiz.R;
 import com.example.utilisateur.topquiz.model.Question;
@@ -12,7 +14,7 @@ import com.example.utilisateur.topquiz.model.QuestionBank;
 
 import java.util.Arrays;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView mGreetingText;
     private Button mPlayButton1;
@@ -20,21 +22,56 @@ public class GameActivity extends AppCompatActivity {
     private Button mPlayButton3;
     private Button mPlayButton4;
     private QuestionBank mQuestionBank;
+    private Question mCurrentQuestion;
+    private int mScore;
+    private Button mAnswerButton1;
+    private Button mAnswerButton2;
+    private Button mAnswerButton3;
+    private Button mAnswerButton4;
+    private TextView mQuestionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        //recuperation des variables xml
 
-        mGreetingText = (TextView) findViewById(R.id.activity_game_question_text);
-        mPlayButton1 = (Button) findViewById(R.id.activity_game_answer1_btn);
-        mPlayButton2 = (Button) findViewById(R.id.activity_game_answer2_btn);
-        mPlayButton3 = (Button) findViewById(R.id.activity_game_answer3_btn);
-        mPlayButton4 = (Button) findViewById(R.id.activity_game_answer4_btn);
         mQuestionBank = this.generateQuestions();
 
+        //recuperation des variables xml
+
+        mGreetingText = findViewById(R.id.activity_game_question_text);
+        mPlayButton1 = findViewById(R.id.activity_game_answer1_btn);
+        mPlayButton2 = findViewById(R.id.activity_game_answer2_btn);
+        mPlayButton3 = findViewById(R.id.activity_game_answer3_btn);
+        mPlayButton4 = findViewById(R.id.activity_game_answer4_btn);
+        mQuestionBank = this.generateQuestions();
+
+        mCurrentQuestion = mQuestionBank.getQuestion();
+        this.displayQuestion(mCurrentQuestion);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        int responseIndex = (int) v.getTag();
+
+        if (responseIndex == mCurrentQuestion.getAnswerIndex()) {
+            // Good answer
+            Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show();
+            mScore++;
+        } else {
+            // Wrong answer
+            Toast.makeText(this, "Wrong answer!", Toast.LENGTH_SHORT).show();
+        }}
+
+
+    private void displayQuestion(final Question question) {
+        mQuestionTextView.setText(question.getQuestion());
+        mAnswerButton1.setText(question.getChoiceList().get(0));
+        mAnswerButton2.setText(question.getChoiceList().get(1));
+        mAnswerButton3.setText(question.getChoiceList().get(2));
+        mAnswerButton4.setText(question.getChoiceList().get(3));
     }
 
     private QuestionBank generateQuestions() {
