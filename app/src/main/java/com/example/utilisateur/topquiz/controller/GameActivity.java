@@ -1,5 +1,7 @@
 package com.example.utilisateur.topquiz.controller;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +28,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private QuestionBank mQuestionBank;
     private Question mCurrentQuestion;
+    private int mScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_game);
 
 
-
+        mScore=0;
         mNumberOfQuestions = 4;
 
 
@@ -74,7 +77,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (responseIndex == mCurrentQuestion.getAnswerIndex()) {
             // Good answer
             Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show();
-
+            mScore++;
         } else {
             // Wrong answer
             Toast.makeText(this, "Wrong answer!", Toast.LENGTH_SHORT).show();
@@ -83,12 +86,27 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     // Else, display the next question.
         if (--mNumberOfQuestions == 0) {
         // End the game
-
+        endGame();
         } else {
         mCurrentQuestion = mQuestionBank.getQuestion();
         displayQuestion(mCurrentQuestion);
         }
 }
+
+    private void endGame() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Bien joué!")
+                .setMessage("Ton score score est de " + mScore)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .create()
+                .show();
+    }
 
     private void displayQuestion(final Question question) {
         mQuestionTextView.setText(question.getQuestion());
