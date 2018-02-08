@@ -2,9 +2,11 @@ package com.example.utilisateur.topquiz.controller;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +34,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int mScore;
     public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
 
+    private boolean mEnableTouchEvents;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +45,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mScore=0;
         mNumberOfQuestions = 4;
 
-
+        mEnableTouchEvents = true;
 
 
         //recuperation des variables xml
@@ -73,8 +77,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return mEnableTouchEvents && super.dispatchTouchEvent(ev);
+    }
+
+    @Override
     public void onClick(View v) {
         int responseIndex = (int) v.getTag();
+
+        mEnableTouchEvents = false;
 
         if (responseIndex == mCurrentQuestion.getAnswerIndex()) {
             // Good answer
@@ -84,15 +95,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             // Wrong answer
             Toast.makeText(this, "Wrong answer!", Toast.LENGTH_SHORT).show();
         }
-    // If this is the last question, ends the game.
-    // Else, display the next question.
-        if (--mNumberOfQuestions == 0) {
-        // End the game
-        endGame();
-        } else {
-        mCurrentQuestion = mQuestionBank.getQuestion();
-        displayQuestion(mCurrentQuestion);
-        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // If this is the last question, ends the game.
+                // Else, display the next question.
+                mEnableTouchEvents = true;
+                if (--mNumberOfQuestions == 0) {
+                    // End the game
+                    endGame();
+                } else {
+                    mCurrentQuestion = mQuestionBank.getQuestion();
+                    displayQuestion(mCurrentQuestion);
+                }
+            }
+        }, 2000); // LENGTH_SHORT is usually 2 second long
+
+
+
+
 }
 
     private void endGame() {
