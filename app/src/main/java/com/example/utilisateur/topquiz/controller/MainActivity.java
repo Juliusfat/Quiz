@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mGreetingText;
     private EditText mNameInput;
     private Button mPlayButton;
+    private Button mBestButton;
     private user mUser;
     private static final int GAME_ACTIVITY_REQUEST_CODE = 42;
     private SharedPreferences preferences;
@@ -40,9 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
         //recuperation des variables xml
 
-        mGreetingText = (TextView) findViewById(R.id.activity_main_greeting_txt);
-        mNameInput = (EditText) findViewById(R.id.activity_main_name_input);
-        mPlayButton = (Button) findViewById(R.id.activity_main_play_btn);
+        mGreetingText = findViewById(R.id.activity_main_greeting_txt);
+        mNameInput = findViewById(R.id.activity_main_name_input);
+        mPlayButton = findViewById(R.id.activity_main_play_btn);
+        mBestButton = findViewById(R.id.activity_main_best_btn);
 
 
         helloUser();
@@ -67,9 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
             });
 
-
-
-
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,8 +81,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent gameActivityIntent = new Intent(MainActivity.this, GameActivity.class);
                 startActivityForResult(gameActivityIntent, GAME_ACTIVITY_REQUEST_CODE);
 
+            }
+        });
 
-
+        mBestButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,BestActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -29,5 +29,15 @@
         android:padding="30dp"
         android:layout_gravity="center_horizontal"
         android:text="Jouons"/>
+    <Button
+        android:id="@+id/activity_main_best_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/mybutton"
+        android:padding="30dp"
+        android:text="Meilleurs Scores"
+        android:textColor="#FFF" />
 
 </LinearLayout>
