@@ -10,9 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME ="contact_database";
+    private static final String DATABASE_NAME ="user_database";
     private static final int DATABASE_VERSION = 1;
-    private static final String CONTACT_TABLE_SQL = "CREATE TABLE utilisateur("+
+    private static final String USER_TABLE_SQL = "CREATE TABLE user("+
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "first_name TEXT," +
             "score INTEGER )";
@@ -24,7 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CONTACT_TABLE_SQL);
+        db.execSQL(USER_TABLE_SQL);
 
     }
 

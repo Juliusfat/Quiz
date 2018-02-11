@@ -1,18 +1,23 @@
 package com.example.utilisateur.topquiz.controller;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.utilisateur.topquiz.R;
 
+import com.example.utilisateur.topquiz.model.DatabaseHandler;
 import com.example.utilisateur.topquiz.model.user;
 
 import java.nio.file.attribute.UserPrincipal;
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private String firstname;
     private int oldscore;
+
 
 
     @Override
@@ -100,7 +106,9 @@ public class MainActivity extends AppCompatActivity {
 
             int score = data.getIntExtra(GameActivity.BUNDLE_EXTRA_SCORE, 0);
             preferences.edit().putInt("Score", score).apply();
+
             helloUser();
+            hydrateBase();
 
         }
     }
@@ -118,6 +126,31 @@ public class MainActivity extends AppCompatActivity {
             mNameInput.setText(firstname);
             mNameInput.setSelection(firstname.length());
         }
+
+
+    }
+
+    protected void hydrateBase () {
+
+        DatabaseHandler db = new DatabaseHandler(this);
+        // initialisation des valeurs
+        ContentValues insertValues = new ContentValues();
+        insertValues.put("first_name", firstname);
+        insertValues.put("score",oldscore);
+
+        try {
+
+               /* db.getWritableDatabase().update("contacts",insertValues,"id=?",params);
+                setResult(RESULT_OK);
+                finish();*/
+
+                db.getWritableDatabase().insert("user", null, insertValues);
+                Toast.makeText(this, "score sauvegardé", Toast.LENGTH_SHORT).show();
+
+        } catch (SQLiteException ex) {
+            Log.e("SQL EXCEPTION", ex.getMessage());
+        }
+
 
 
     }
