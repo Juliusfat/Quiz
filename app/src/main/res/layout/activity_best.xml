@@ -13,8 +13,9 @@
 
         <Button
             android:id="@+id/activity_list_alpha_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:background="@drawable/mybutton"
@@ -24,13 +25,14 @@
 
         <Button
             android:id="@+id/activity_list-score_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:background="@drawable/mybutton"
             android:padding="29dp"
-            android:text="Liste par scores"
+            android:text="Liste triée par scores"
             android:textColor="#FFF" />
 
 

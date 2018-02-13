@@ -9,13 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
         android:textStyle="bold"
+        android:gravity="center_horizontal"
         android:text="prénom"/>
 
     <TextView
         android:id="@+id/ListtextViewScore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:gravity="center_horizontal"
         android:layout_weight="1"
         android:text="score"/>
 
