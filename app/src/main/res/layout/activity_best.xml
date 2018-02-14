@@ -21,6 +21,7 @@
             android:background="@drawable/mybutton"
             android:padding="29dp"
             android:text="Liste Alphabetique"
+            android:onClick="sortByFirstName"
             android:textColor="#FFF" />
 
         <Button
@@ -33,6 +34,7 @@
             android:background="@drawable/mybutton"
             android:padding="29dp"
             android:text="Liste triée par scores"
+            android:onClick="sortByScore"
             android:textColor="#FFF" />
 
 
