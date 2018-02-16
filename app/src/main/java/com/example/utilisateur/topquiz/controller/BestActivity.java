@@ -20,10 +20,10 @@ public class BestActivity extends AppCompatActivity {
 
     private DatabaseHandler db;
     private ListView userListView;
-    private Button mScoreButton;
-    private Button mNameButton;
-    private UserArrayAdapter userAdapter;
 
+    private UserArrayAdapter userAdapter;
+    private  List<user> userList;
+    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,18 @@ public class BestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_best);
 
         this.db = new DatabaseHandler(this);
+        userList = new ArrayList<>();
+        String sql = "SELECT id, first_name, score FROM user ORDER BY score DESC LIMIT 5";
+        cursor = this.db.getReadableDatabase().rawQuery(sql,null);
+
+        while (cursor.moveToNext()) {
+
+            userList.add(this.hydrateUser(cursor));
+        }
+
+        //fermer cursor
+
+        cursor.close();
 
         userListView = findViewById(R.id.scoreListView);
 
@@ -46,20 +58,6 @@ public class BestActivity extends AppCompatActivity {
 
     public void sortByFirstName(View view) {
 
-        List<user> userList = new ArrayList<>();
-        String sql = "SELECT id, first_name, score FROM user ORDER BY score DESC LIMIT 5";
-        Cursor cursor = this.db.getReadableDatabase().rawQuery(sql,null);
-
-        // boucle sur le curseur
-
-        while (cursor.moveToNext()) {
-
-            userList.add(this.hydrateUser(cursor));
-        }
-
-        //fermer cursor
-
-        cursor.close();
         Collections.sort(userList, new Comparator<user>() {
             @Override
             public int compare(user user, user user1) {
@@ -73,18 +71,14 @@ public class BestActivity extends AppCompatActivity {
     }
 
     public void sortByScore(View view) {
-        List<user> userList = new ArrayList<>();
-        String sql = "SELECT id, first_name, score FROM user ORDER BY score DESC LIMIT 5";
-        Cursor cursor = this.db.getReadableDatabase().rawQuery(sql,null);
+        Collections.sort(userList, new Comparator<user>() {
+            @Override
+            public int compare(user user, user user1) {
+                return user.getMscore().compareTo(user1.getMscore()) ;
+            }
+        });
 
-        // boucle sur le curseur
-
-        while (cursor.moveToNext()) {
-
-            userList.add(this.hydrateUser(cursor));
-        }
-
-        //fermer cursor
+        Collections.reverse(userList);
 
         userAdapter = new UserArrayAdapter(this,userList);
         userListView.setAdapter(userAdapter);
