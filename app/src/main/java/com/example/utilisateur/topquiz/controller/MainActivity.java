@@ -3,6 +3,7 @@ package com.example.utilisateur.topquiz.controller;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -138,20 +139,42 @@ public class MainActivity extends AppCompatActivity {
         insertValues.put("first_name", firstname);
         insertValues.put("score",oldscore);
 
-        try {
+        String[] param1 = {String.valueOf(firstname)};
+        String sql = "SELECT id, first_name, score FROM user WHERE first_name=?";
+        Cursor cursor = db.getReadableDatabase().rawQuery(sql, param1);
+        while (cursor.moveToNext()) {
 
-               /* db.getWritableDatabase().update("contacts",insertValues,"id=?",params);
-                setResult(RESULT_OK);
-                finish();*/
 
-                db.getWritableDatabase().insert("user", null, insertValues);
-                Toast.makeText(this, "score sauvegardé", Toast.LENGTH_SHORT).show();
+            mUser.setIdUser(cursor.getLong(0));
 
-        } catch (SQLiteException ex) {
-            Log.e("SQL EXCEPTION", ex.getMessage());
+            mUser.setMscore(cursor.getInt(2));
         }
 
+        //fermer cursor
 
+        cursor.close();
+
+
+
+        if (mUser.getIdUser() == null) {
+            try {
+
+                db.getWritableDatabase().insert("user", null, insertValues);
+                Toast.makeText(this, "user créé", Toast.LENGTH_SHORT).show();
+
+            } catch (SQLiteException ex) {
+                Log.e("SQL EXCEPTION", ex.getMessage());
+            }
+        }else{
+
+            if (mUser.getMscore() < oldscore){
+                String[] param = {String.valueOf(mUser.getIdUser())};
+
+                db.getWritableDatabase().update("user",insertValues,"id=?",param);
+                Toast.makeText(this, "score sauvegardé", Toast.LENGTH_SHORT).show();
+            }
+
+        }
 
     }
 
